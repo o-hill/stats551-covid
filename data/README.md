@@ -15,5 +15,5 @@ This directory stores all the relevant data needed to recreate our analysis.
 	**Note**: Raw data is taken from the CDC (https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-by-Sex-Age-and-S/9bhg-hcku), but this data set gets updated weekly. To use any analysis on future dates, one will need to take this data from the CDC direclty.
 
 - [x] data cleaning
-- [ ] data population from interpolation
+- [x] data population from interpolation
 - [ ] automatic reading/cleaning of the CDC data
