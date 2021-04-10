@@ -17,5 +17,5 @@ def read_data(interp_type='linear', binary=True):
     """
 
     binary_str = 'binary' if binary else 'nonbinary'
-    return pd.read_csv('../../data/' + interp_type + 
-                       '-pop-deaths-and-' + binary_str + '-mandates.csv')   
+    return pd.read_csv('../../data/' + interp_type +
+                       '-pop-deaths-and-' + binary_str + '-mandates.csv')
