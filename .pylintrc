@@ -1,6 +1,6 @@
 [pre-commit-hook]
 limit=10.0
-generated-members=numpy.* ,torch.*
+generated-members=numpy.* ,torch.*, theano.config.*
 
 [DESIGN]
 max-parents=15
