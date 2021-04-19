@@ -42,10 +42,9 @@ def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9
         
         # age prior
         mu_age_mean = np.linspace(-5,5,len(age_data.columns))
-        V_age_mean = np.identity(len(age_data.columns))
         cov = pm.HalfNormal('cov', sigma=2)
         mu_age = pm.MvNormal('mu_age', mu=mu_age_mean, cov=np.identity(len(age_data.columns)), shape=(1, 10))
-        beta_age = pm.MvNormal('beta_age', mu=mu_age, cov=cov*np.identity(10), shape=(1, 10))
+        beta_age = pm.MvNormal('beta_age', mu=mu_age, cov=(cov**2)*np.identity(10), shape=(1, 10))
 
         # sex prior
         mu_sex = pm.Normal('mu_sex', mu=0, sigma=1)
@@ -147,6 +146,9 @@ def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9
         ppc = pm.sample_posterior_predictive(trace, var_names=["y_obs"])
     az.plot_ppc(az.from_pymc3(posterior_predictive=ppc, model=model))
     plt.savefig('../images/posterior_predictive/' + interp_type + '_' + binary_str + '.png')
+
+    # return trace so that user can work with posterior data directly
+    return trace
 
 
 if __name__ == '__main__':
