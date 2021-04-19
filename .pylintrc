@@ -1,9 +1,9 @@
 [pre-commit-hook]
-limit=10.0
+limit=8.0
 generated-members=numpy.* ,torch.*, theano.config.*
 
 [DESIGN]
 max-parents=15
 
 [MESSAGES CONTROL]
-disable=W0221,W0613,C0103
+disable=W0221,W0613,C0103,W0612,C0301,E1101,R0913

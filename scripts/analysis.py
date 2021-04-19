@@ -1,21 +1,21 @@
 """File that will perform the analysis for all population interpolations."""
+import argparse
+import theano
+import theano.tensor as tt
+
 import numpy as np
 import pandas as pd
 import pymc3 as pm
-import theano
-import theano.tensor as tt
 import matplotlib.pyplot as plt
 import arviz as az
-import arviz.labels as azl
-import argparse
-import os
-import re
+
+
 
 
 def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9, hdi_prob=0.95, zero_inf=0.7):
 
     # preprocessing
-    binary_str = 'binary' if binary else 'nonbinary' 
+    binary_str = 'binary' if binary else 'nonbinary'
     df = pd.read_csv('../data/' + interp_type +
                        '-pop-deaths-and-' + binary_str + '-mandates.csv', index_col=0)
     df = df.rename(columns={"Age Group": "Age_Group", "COVID-19 Deaths": "covid_19_deaths"})
@@ -46,17 +46,17 @@ def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9
         cov = pm.HalfNormal('cov', sigma=2)
         mu_age = pm.MvNormal('mu_age', mu=mu_age_mean, cov=np.identity(len(age_data.columns)), shape=(1, 10))
         beta_age = pm.MvNormal('beta_age', mu=mu_age, cov=cov*np.identity(10), shape=(1, 10))
-        
+
         # sex prior
         mu_sex = pm.Normal('mu_sex', mu=0, sigma=1)
         sigma_sex = pm.HalfNormal('simga_sex', sigma=2)
         beta_sex = pm.Normal('beta_sex', mu=mu_sex, sigma=sigma_sex)
-        
+
         # intercept prior
         mu_intercept = pm.Normal('mu_intercept', mu=0, sigma=1)
         sigma_intercept = pm.HalfNormal('simga_intercept', sigma=2)
         beta_intercept = pm.Normal('beta_intercept', mu=mu_intercept, sigma=sigma_intercept)
-        
+
         # mean setup for likelihood
         mandates = np.array(mandates).astype(theano.config.floatX)
         population = np.array(population).astype(theano.config.floatX)
@@ -68,11 +68,11 @@ def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9
         mean = beta_intercept + pm.math.matrix_dot(w_mandates, xi*beta_mandates) \
                             + pm.math.matrix_dot(w_sex, beta_sex).T \
                             + pm.math.matrix_dot(w_age, beta_age.T).T
-        
+
         # likelihood
         obs = pm.ZeroInflatedPoisson('y_obs', psi=zero_inf, theta=population*tt.exp(mean), observed=covid_deaths)
         # obs = pm.Normal('crap', mu=mean, sigma=3, observed=covid_deaths)
-        
+
         # sample from posterior
         trace = pm.sample(n_samples, tune=n_samples, nuts={'target_accept': 0.98})
 
@@ -171,5 +171,3 @@ if __name__ == '__main__':
     else:
         interp_type = args.interp if args.interp is not None else 'ncs'
         run_model(month, n_samples, interp_type, binary, spike, hdi_prob, zero_inf)
-
-
