@@ -1,0 +1,2 @@
+,mean,sd,hdi_2.5%,hdi_97.5%,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+beta_intercept,-5.232,0.717,-6.586,-3.955,0.028,0.02,698.0,759.0,1.01
