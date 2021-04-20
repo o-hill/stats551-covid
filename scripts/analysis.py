@@ -77,37 +77,37 @@ def run_model(month=7, n_samples=1000, interp_type='ncs', binary=True, spike=0.9
 
     # posterior hdis
     mandates = test_df.iloc[:,-4:]
-    x = az.summary(trace, var_names=["beta_mandate"], hdi_prob=hdi_prob).iloc[:,2:4]
+    x = az.summary(trace, var_names=["beta_mandate"], hdi_prob=hdi_prob)
     x.index = mandates.columns
-    x.to_csv('../images/posteriors/mandate_' + interp_type + '_' + binary_str + '_' + 'conf.csv')
-    x = az.summary(trace, var_names=["beta_sex"], hdi_prob=hdi_prob).iloc[:,2:4]
+    x.to_csv('../images/posteriors/mandate_' + interp_type + '_' + binary_str + '_' + 'summary.csv')
+    x = az.summary(trace, var_names=["beta_sex"], hdi_prob=hdi_prob)
     x.index = sex_data.columns
-    x.to_csv('../images/posteriors/sex_' + interp_type + '_' + binary_str + '_' + 'conf.csv')
-    x = az.summary(trace, var_names=["beta_age"], hdi_prob=hdi_prob).iloc[:,2:4]
+    x.to_csv('../images/posteriors/sex_' + interp_type + '_' + binary_str + '_' + 'summary.csv')
+    x = az.summary(trace, var_names=["beta_age"], hdi_prob=hdi_prob)
     x.index = age_data.columns
-    x.to_csv('../images/posteriors/age_' + interp_type + '_' + binary_str + '_' + 'conf.csv')
-    x = az.summary(trace, var_names=["beta_intercept"], hdi_prob=hdi_prob).iloc[:,2:4]
-    x.to_csv('../images/posteriors/intercept_' + interp_type + '_' + binary_str + '_' + 'conf.csv')
+    x.to_csv('../images/posteriors/age_' + interp_type + '_' + binary_str + '_' + 'summary.csv')
+    x = az.summary(trace, var_names=["beta_intercept"], hdi_prob=hdi_prob)
+    x.to_csv('../images/posteriors/intercept_' + interp_type + '_' + binary_str + '_' + 'summary.csv')
 
     # posterior distributions
     ax = az.plot_forest(trace, 'ridgeplot', var_names=["beta_intercept"], combined=True, hdi_prob=0.99999)
     ax[0].set_title(r'Posterior Distribution of $\beta_0$')
-    plt.savefig('../images/posteriors/intercept_posteriors' + interp_type + '_' + binary_str + '.png')
+    plt.savefig('../images/posteriors/intercept_posteriors_' + interp_type + '_' + binary_str + '.png')
 
     ax = az.plot_forest(trace, 'ridgeplot', var_names=["beta_age"], combined=True, hdi_prob=0.99999)
     ax[0].set_yticklabels(reversed(age_data.columns))
     ax[0].set_title(r'Posterior Distribution of $\beta_{age}$')
-    plt.savefig('../images/posteriors/age_posteriors' + interp_type + '_' + binary_str + '.png')
+    plt.savefig('../images/posteriors/age_posteriors_' + interp_type + '_' + binary_str + '.png')
 
     ax = az.plot_forest(trace, 'ridgeplot', var_names=["beta_sex"], combined=True, hdi_prob=0.99999)
     ax[0].set_yticklabels(reversed(sex_data.columns))
     ax[0].set_title(r'Posterior Distribution of $\beta_{sex}$')
-    plt.savefig('../images/posteriors/sex_posteriors' + interp_type + '_' + binary_str + '.png')
+    plt.savefig('../images/posteriors/sex_posteriors_' + interp_type + '_' + binary_str + '.png')
 
     ax = az.plot_forest(trace, 'ridgeplot', var_names=["beta_mandate"], combined=True, hdi_prob=0.99999)
     ax[0].set_yticklabels(reversed(mandates.columns))
     ax[0].set_title(r'Posterior Distribution of $\beta_{mandate}$')
-    plt.savefig('../images/posteriors/mandate_posteriors' + interp_type + '_' + binary_str + '.png')
+    plt.savefig('../images/posteriors/mandate_posteriors_' + interp_type + '_' + binary_str + '.png')
 
     # ESS Plots
     ax = az.plot_ess(trace, var_names=["beta_intercept"])

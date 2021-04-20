@@ -1,0 +1,2 @@
+,mean,sd,hdi_2.5%,hdi_97.5%,mcse_mean,mcse_sd,ess_bulk,ess_tail,r_hat
+Male,0.187,0.012,0.164,0.21,0.0,0.0,7202.0,2862.0,1.0
